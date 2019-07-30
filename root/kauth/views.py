@@ -27,7 +27,7 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import KauthUser
-from .forms import KauthRegistrationForm, KauthUserChangeForm, KauthEmailChangeForm
+from .forms import KauthAuthenticationForm, KauthRegistrationForm, KauthUserChangeForm, KauthEmailChangeForm
 from .utilities import kauth_send_mail
 
 
@@ -50,6 +50,7 @@ class KauthUserIsAnonymousMixin:
 
 
 class KauthLoginView(KauthUserIsAnonymousMixin, LoginView):
+    form_class = KauthAuthenticationForm
     template_name = 'kauth/login_form.html'
 
 

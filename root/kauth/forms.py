@@ -1,17 +1,50 @@
 from django import forms
 
+from django.contrib.auth import authenticate
+from django.core.validators import validate_email
+
 from django.core import signing
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
 from .models import KauthUser
 from .utilities import kauth_send_mail
+
+
+class KauthAuthenticationForm(AuthenticationForm):
+    username = UsernameField(label='Имя пользователя / Адрес электронной почты', widget=forms.TextInput(attrs={'autofocus': True}))
+
+    def clean(self):
+        username = self.cleaned_data['username']
+        try:
+            validate_email(username)
+        except ValidationError:
+            pass
+        else:
+            try:
+                user = KauthUser.objects.get(email=username)
+            except ObjectDoesNotExist:
+                pass
+            else:
+                username = user.username
+
+        password = self.cleaned_data.get('password')
+
+        if username is not None and password:
+            self.user_cache = authenticate(self.request, username=username, password=password)
+            if self.user_cache is None:
+                raise self.get_invalid_login_error()
+            else:
+                self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
 
 
 class KauthRegistrationForm(UserCreationForm):
