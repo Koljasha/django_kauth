@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    Удаление пользователя
+{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h5 class="my-4">Удаление пользователя {{ user }}</h5>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Удалить">
+        <a class="btn btn-secondary kauth_btn" href="{% url 'kauth:profile' %}">Вернуться</a>
+    </form>
+{% endblock content %}

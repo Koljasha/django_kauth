@@ -1,0 +1,7 @@
+{% autoescape off %}
+    Регистрация:
+    * пользователь {{ user }}
+    * электронный адрес {{ email }}.
+    Проследуйте по ссылке:
+    {{ protocol }}://{{ domain }}{% url 'kauth:registration_confirm' uidb64=uid token=token %}
+{% endautoescape %}

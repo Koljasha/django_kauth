@@ -1,0 +1,8 @@
+{% autoescape off %}
+    Изменение электронного адреса:
+    * пользователь {{ user }}
+    * "старый" электронный адрес {{ old_email }}
+    * "новый" электронный адрес {{ new_email }}.
+    Проследуйте по ссылке:
+    {{ protocol }}://{{ domain }}{% url 'kauth:email_change_confirm' uidb64=uid token=token %}
+{% endautoescape %}

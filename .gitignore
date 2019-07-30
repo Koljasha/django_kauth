@@ -1,0 +1,5 @@
+venv/
+root/db.sqlite3
+root/root/__pycache__/
+root/kauth/__pycache__/
+root/kauth/migrations/

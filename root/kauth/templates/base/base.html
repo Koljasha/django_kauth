@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %} {% endblock title %} - Boilrplate </title>
+    <link rel="stylesheet" type="text/css" href="{% static "bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+</head>
+<body>
+    <div class="container">
+        <ul class="nav justify-content-end my-2">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'kauth:index' %}">Главная</a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kauth:profile' %}">Профиль</a>
+            </li>
+
+            {% if user.is_staff %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
+              </li>
+            {% endif %}
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kauth:logout' %}">Выход</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kauth:registration' %}">Регистрация</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kauth:login' %}">Вход</a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <hr>
+        {% include "base/messages.html" %}
+        <hr>
+
+        {% block content %}
+        {% endblock content %}
+
+    </div>
+</body>
+</html>

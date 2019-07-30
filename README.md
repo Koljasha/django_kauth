@@ -1,1 +1,1 @@
-# django_boilrplate
+### Стартовый шаблон Django c авторизацией

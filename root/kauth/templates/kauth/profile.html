@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    Профиль
+{% endblock title %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <h2 class="mb-5">Привет, {{ user }}</h2>
+    </div>
+    <div class="row justify-content-around">
+        <a class="btn btn-primary" href="{% url 'kauth:profile_change' %}">Изменить пользователя</a>
+        <a class="btn btn-primary" href="{% url 'kauth:email_change' %}">Изменить email</a>
+        <a class="btn btn-primary" href="{% url 'kauth:password_change' %}">Изменить пароль</a>
+        <a class="btn btn-warning" href="{% url 'kauth:profile_delete' %}">Удалить профиль</a>
+    </div>
+{% endblock content %}
