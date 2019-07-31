@@ -28,6 +28,11 @@ class KauthAuthenticationForm(AuthenticationForm):
                            help_text='Введите текст с картинки')
 
     def clean(self):
+        # Вывод общей ошибки, если неверная captcha
+        if self.errors:
+            raise self.get_invalid_login_error()
+
+        # проверка username, или email
         username = self.cleaned_data['username']
         try:
             validate_email(username)
