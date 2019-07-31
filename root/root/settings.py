@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'captcha',
     'crispy_forms',
     'kauth.apps.KauthConfig',
 ]
@@ -143,3 +144,7 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1', ]
+
+CAPTCHA_FONT_SIZE = 30
+CAPTCHA_LETTER_ROTATION = (-10, 10)
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'

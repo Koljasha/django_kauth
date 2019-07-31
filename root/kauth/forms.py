@@ -14,12 +14,18 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
+from captcha.fields import CaptchaField
+
 from .models import KauthUser
 from .utilities import kauth_send_mail
 
 
 class KauthAuthenticationForm(AuthenticationForm):
-    username = UsernameField(label='Имя пользователя / Адрес электронной почты', widget=forms.TextInput(attrs={'autofocus': True}))
+    username = UsernameField(label='Имя пользователя / Адрес электронной почты',
+                             widget=forms.TextInput(attrs={'autofocus': True}))
+
+    captcha = CaptchaField(label='Вы человек?',
+                           help_text='Введите текст с картинки')
 
     def clean(self):
         username = self.cleaned_data['username']
@@ -38,16 +44,18 @@ class KauthAuthenticationForm(AuthenticationForm):
         password = self.cleaned_data.get('password')
 
         if username is not None and password:
-            self.user_cache = authenticate(self.request, username=username, password=password)
+            self.user_cache = authenticate(
+                self.request, username=username, password=password)
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
             else:
                 self.confirm_login_allowed(self.user_cache)
 
-        return self.cleaned_data
-
 
 class KauthRegistrationForm(UserCreationForm):
+    captcha = CaptchaField(label='Вы человек?',
+                           help_text='Введите текст с картинки')
+
     class Meta(UserCreationForm.Meta):
         model = KauthUser
         fields = ('username', 'email')
@@ -86,7 +94,8 @@ class KauthUserChangeForm(forms.ModelForm):
         super().clean()
         password = self.cleaned_data['password']
         if not check_password(password, self.instance.password):
-            errors = {'password': ValidationError('Неверный пароль пользователя', code='invalid')}
+            errors = {'password': ValidationError(
+                'Неверный пароль пользователя', code='invalid')}
             raise forms.ValidationError(errors)
 
 
@@ -106,7 +115,8 @@ class KauthEmailChangeForm(forms.ModelForm):
         super().clean()
         password = self.cleaned_data['password']
         if not check_password(password, self.instance.password):
-            errors = {'password': ValidationError('Неверный пароль пользователя', code='invalid')}
+            errors = {'password': ValidationError(
+                'Неверный пароль пользователя', code='invalid')}
             raise forms.ValidationError(errors)
 
     def save(self, commit=True):
@@ -120,7 +130,8 @@ class KauthEmailChangeForm(forms.ModelForm):
         self.context['user'] = user
         self.context['new_email'] = self.cleaned_data["email"]
         self.context['uid'] = urlsafe_base64_encode(force_bytes(user.pk))
-        self.context['token'] = signing.dumps((user.pk, self.context['new_email']))
+        self.context['token'] = signing.dumps(
+            (user.pk, self.context['new_email']))
 
         kauth_send_mail(**self.sender, context=self.context)
 

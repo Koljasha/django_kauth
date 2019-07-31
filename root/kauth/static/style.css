@@ -2,6 +2,10 @@
     display: none;
 }
 
+.invalid-feedback{
+    display: block;
+}
+
 .kauth_btn {
     margin: 0 20px;
 }
