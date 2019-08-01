@@ -35,9 +35,7 @@ class KauthIndex(TemplateView):
     template_name = 'kauth/index.html'
 
 
-class PPage(LoginRequiredMixin, TemplateView):
-    # Удалить - для теста
-    ###
+class PrivatePage(LoginRequiredMixin, TemplateView):
     template_name = 'kauth/ppage.html'
 
 

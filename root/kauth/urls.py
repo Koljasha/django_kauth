@@ -23,6 +23,6 @@ urlpatterns = [
 
     path('accounts/', views.KauthRedirectToProfileView.as_view(), name='redirect_to_profile'),
 
-    path('pp/', views.PPage.as_view(), name='pp'),
+    path('pp/', views.PrivatePage.as_view(), name='pp'),
     path('', views.KauthIndex.as_view(), name='index'),
 ]
